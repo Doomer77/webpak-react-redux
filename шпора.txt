@@ -1,0 +1,107 @@
+1. npm init
+2. npm i -D webpack webpack-cli
+3. add folder src -> index.js and index.html
+4. add file webpack.config.js
+5. npm i -D style-loader less-loader css-loader file-loader
+6. npm i -D html-webpack-plugin clean-webpack-plugin
+7. npm i -D webpack-dev-server
+8. in src add index.less
+
+Базовые настройки webpack
+const path = require('path')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const HTMLWebpackPlugin = require('html-webpack-plugin')
+
+module.exports = {
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[hash].js'
+  },
+  devServer: {
+    port: 3000,
+    static: './src'
+  },
+  plugins: [
+    new HTMLWebpackPlugin({ template: './src/index.html' }),
+    new CleanWebpackPlugin()
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.(css|less)$/,
+        use: ['style-loader', 'css-loader', 'less-loader']
+      },
+      {
+        test: /\.(jpg|jpeg|png|svg)/,
+        use: ['file-loader']
+      }
+    ]
+  }
+};
+
+9. npm install --save-dev babel-loader @babel/core
+10. npm install @babel/preset-env --save-dev
+11. npm install --save-dev @babel/preset-react
+12. npm install --save @babel/polyfill
+13. npm i --save react react-dom
+
+Настройка под React
+const path = require('path')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const HTMLWebpackPlugin = require('html-webpack-plugin')
+
+module.exports = {
+  mode: 'development',
+  entry: ['@babel/polyfill', './src/index.jsx'],
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[hash].js'
+  },
+  devServer: {
+    port: 3000,
+    static: './src'
+  },
+  plugins: [
+    new HTMLWebpackPlugin({ template: './src/index.html' }),
+    new CleanWebpackPlugin()
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.(css|less)$/,
+        use: ['style-loader', 'css-loader', 'less-loader']
+      },
+      {
+        test: /\.(jpg|jpeg|png|svg)/,
+        use: ['file-loader']
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      },
+      {
+        test: /\.m?jsx$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ['@babel/preset-react', '@babel/preset-env']
+          }
+        }
+      }
+    ]
+  }
+}; 
+
+14. npm i --save redux react-redux redux-thunk
+15. add in src folder redurce
+16. npm i @redux-devtools/extension
+17. npm i --save react-router-dom axios
